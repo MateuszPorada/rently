@@ -1,0 +1,82 @@
+eureka:
+  instance:
+    instance-id: '${spring.application.name}:${random.int}'
+    prefer-ip-address: true
+  client:
+    service-url:
+      defaultZone: '${CLIENT_ZONE}'
+    fetch-registry: true
+spring:
+  webflux:
+    base-path: '${BASE_PATH}'
+  cloud:
+    gateway:
+      globalcors:
+        corsConfigurations:
+          '[/**]':
+            allowedOrigins: "*"
+            allowedHeaders: "*"
+            allowedMethods: "*"
+      httpclient:
+        wiretap: true
+      httpserver:
+        wiretap: true
+      routes:
+        - id: user-service
+          uri: lb://user-service
+          predicates:
+            - Path=/api/user/**
+          filters:
+            - TokenRelay=
+        - id: image-service
+          uri: lb://image-service
+          predicates:
+            - Path=/api/image/**
+          filters:
+            - TokenRelay=
+        - id: offer-service
+          uri: lb://offer-service
+          predicates:
+            - Path=/api/offer/**
+          filters:
+            - TokenRelay=
+        - id: chat-service
+          uri: lb://chat-service
+          predicates:
+            - Path=/api/chat/**
+          filters:
+            - TokenRelay=
+        - id: frontend
+          uri: '${FRONTEND_URI}'
+          predicates:
+            - Path=/**
+  application:
+    name: gateway
+  security:
+    oauth2:
+      client:
+        registration:
+          gateway:
+            provider: my-provider
+            client-id: rently-client
+            client-secret: '${CLIENT_SECRET}'
+            authorization-grant-type: authorization_code
+            redirect-uri: '${REDIRECT_URI}'
+            scope: openid
+        provider:
+          my-provider:
+            issuer-uri: '${ISSUER_URI}'
+            authorization-uri: '${AUTHORIZATION_URI}'
+server:
+  port: '${SERVER_PORT}'
+  error:
+    include-message: always
+logging:
+  level:
+    reactor:
+      netty: INFO
+    org:
+      springframework:
+        web: DEBUG
+        cloud:
+          gateway: TRACE

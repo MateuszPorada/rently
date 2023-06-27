@@ -1,0 +1,16 @@
+eureka:
+  instance:
+    instance-id: '${spring.application.name}:${random.int}'
+    prefer-ip-address: true
+  client:
+    service-url:
+      defaultZone: '${CLIENT_ZONE}'
+server:
+  port: '${SERVER_PORT}'
+  error:
+    include-message: always
+  servlet:
+    context-path: '${CONTEXT_PATH}'
+spring:
+  application:
+    name: eureka

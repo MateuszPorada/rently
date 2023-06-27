@@ -1,0 +1,45 @@
+eureka:
+  instance:
+    instance-id: '${spring.application.name}:${random.int}'
+    prefer-ip-address: true
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: '${CLIENT_ZONE}'
+spring:
+  application:
+    name: offer-service
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: '${ISSUER_URI}'
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: '${SPRING_DATASOURCE_URL}'
+    username: '${SPRING_DATASOURCE_USERNAME}'
+    password: '${SPRING_DATASOURCE_PASSWORD}'
+  jpa:
+    hibernate:
+      ddl-auto: '${SPRING_JPA_HIBERNATE_DDL_AUTO}'
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQL95Dialect
+    database: postgresql
+server:
+  port: '${SERVER_PORT}'
+  error:
+    include-message: always
+logging:
+  level:
+    org:
+      springframework:
+        web: DEBUG
+        security: DEBUG
+      cloud:
+        gateway: TRACE
+    reactor:
+      netty: INFO
+
+

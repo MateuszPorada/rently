@@ -1,0 +1,24 @@
+eureka:
+  instance:
+    instance-id: '${spring.application.name}:${random.int}'
+    prefer-ip-address: true
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: '${CLIENT_ZONE}'
+spring:
+  application:
+    name: chat-service
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: '${ISSUER_URI}'
+  data:
+    mongodb:
+      uri: '${MONGO_URI}'
+server:
+  port: '${SERVER_PORT}'
+  error:
+    include-message: always
